@@ -35,6 +35,7 @@ Avoid collisions with the snake's body, boundaries, skulls, and birds.
 
 This project is licensed under the [MIT License](LICENSE).
 
+
 ---
 Feel free to contribute to this project. If you encounter any issues or have suggestions, please create an issue or a pull request.
 
