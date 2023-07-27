@@ -7,55 +7,57 @@ SIZE = 40
 BACKGROUND_COLOR = (0, 0, 0)
 
 
-class Skull:
+class Snake:
     def __init__(self, parent_screen):
         self.parent_screen = parent_screen
-        self.image = pygame.image.load("resources/skull.png").convert()
-        self.image2 = pygame.image.load("resources/skullbody.png").convert()
+        self.image = pygame.image.load("resources/snakehead.jpg").convert()
+        self.image2 = pygame.image.load("resources/snakebody.jpg").convert()
+        self.direction = 'right'
+
         self.length = 1
-        self.x = [760]
-        self.y = [120]
-        self.direction = 'left'
+        self.x = [400]
+        self.y = [720]
 
-    def draw(self):
-        if self.length <= 1:
-            for i in range(self.length):
-                self.parent_screen.blit(self.image, (self.x[0], self.y[0]))
+    def move_left(self):
+        if self.direction != 'right':
+            self.direction = 'left'
 
-        if self.length > 1:
-            for i in range(self.length):
-                self.parent_screen.blit(self.image, (self.x[0], self.y[0]))
-                self.parent_screen.blit(self.image2, (self.x[i], self.y[i]))
-        pygame.display.flip()
+    def move_right(self):
+        if self.direction != 'left':
+            self.direction = 'right'
 
-    def move(self):
-        for i in range(self.length):
-            self.y[i] = random.randint(1, 19) * SIZE
-            self.x[i] = 920
+    def move_up(self):
+        if self.direction != 'down':
+            self.direction = 'up'
+
+    def move_down(self):
+        if self.direction != 'up':
+            self.direction = 'down'
 
     def walk(self):
-        # update body
-        if self.length <= 1:
-            for i in range(self.length - 1, 0, -1):
-                self.x[0] = self.x[i - 1]
-                self.y[0] = self.y[i - 1]
+        for i in range(self.length - 1, 0, -1):
+            self.x[i] = self.x[i - 1]
+            self.y[i] = self.y[i - 1]
 
-        if self.length > 1:
-            for i in range(self.length - 1, 0, -1):
-                self.x[i] = self.x[i - 1]
-                self.y[i] = self.y[i - 1]
-
-        # update head
         if self.direction == 'left':
-            self.x[0] -= SIZE / 2
+            self.x[0] -= SIZE
         if self.direction == 'right':
-            self.x[0] += SIZE / 2
+            self.x[0] += SIZE
         if self.direction == 'up':
-            self.y[0] -= SIZE / 2
+            self.y[0] -= SIZE
         if self.direction == 'down':
-            self.y[0] += SIZE / 2
+            self.y[0] += SIZE
 
         self.draw()
+
+    def draw(self):
+        self.parent_screen.fill(BACKGROUND_COLOR)
+        for i in range(self.length):
+            if i == 0:
+                self.parent_screen.blit(self.image, (self.x[i], self.y[i]))
+            else:
+                self.parent_screen.blit(self.image2, (self.x[i], self.y[i]))
+        pygame.display.flip()
 
     def increase_length(self):
         self.length += 1
@@ -63,9 +65,34 @@ class Skull:
         self.y.append(-1)
 
     def decrease_length(self):
-        self.length -= 1
-        self.x.append(-1)
-        self.y.append(-1)
+        if self.length > 1:
+            self.length -= 1
+            self.x.pop()
+            self.y.pop()
+
+    def is_collision_with_skull(self, skull):
+        for i in range(1, skull.length):
+            if is_collision(self.x[0], self.y[0], skull.x[i], skull.y[i]):
+                return True
+        return False
+
+    def is_collision_with_bird(self, bird):
+        for i in range(1, bird.length):
+            if is_collision(self.x[0], self.y[0], bird.x[i], bird.y[i]):
+                return True
+        return False
+
+    def is_collision_with_apple(self, apple):
+        for i in range(apple.length):
+            if is_collision(self.x[0], self.y[0], apple.x, apple.y):
+                return True
+        return False
+
+    def is_collision_with_apple2(self, apple2):
+        for i in range(apple2.length):
+            if is_collision(self.x[0], self.y[0], apple2.x, apple2.y):
+                return True
+        return False
 
 
 class Apple:
@@ -78,8 +105,7 @@ class Apple:
         self.direction = 'right'
 
     def draw(self):
-
-        for i in range(self.length):
+        for _ in range(self.length):
             self.parent_screen.blit(self.image, (self.x, self.y))
 
     def move(self):
@@ -87,12 +113,10 @@ class Apple:
         self.x = 40
 
     def walk(self):
-        # update body
         for i in range(self.length - 1, 0, -1):
             self.x = self.x[i - 1]
             self.y = self.y[i - 1]
 
-        # update head
         if self.direction == 'left':
             self.x -= SIZE / 4
         if self.direction == 'right':
@@ -115,8 +139,7 @@ class Apple2:
         self.direction = 'up'
 
     def draw(self):
-
-        for i in range(self.length):
+        for _ in range(self.length):
             self.parent_screen.blit(self.image, (self.x, self.y))
 
     def move(self):
@@ -124,12 +147,10 @@ class Apple2:
         self.x = random.randint(1, 24) * SIZE
 
     def walk(self):
-        # update body
         for i in range(self.length - 1, 0, -1):
             self.x = self.x[i - 1]
             self.y = self.y[i - 1]
 
-        # update head
         if self.direction == 'left':
             self.x -= SIZE / 4
         if self.direction == 'right':
@@ -152,8 +173,7 @@ class Bird:
         self.direction = 'down'
 
     def draw(self):
-
-        for i in range(self.length):
+        for _ in range(self.length):
             self.parent_screen.blit(self.image, (self.x, self.y))
 
     def move(self):
@@ -161,12 +181,10 @@ class Bird:
         self.y = 40
 
     def walk(self):
-        # update body
         for i in range(self.length - 1, 0, -1):
             self.x = self.x[i - 1]
             self.y = self.y[i - 1]
 
-        # update head
         if self.direction == 'left':
             self.x -= SIZE / 4
         if self.direction == 'right':
@@ -179,68 +197,44 @@ class Bird:
         self.draw()
 
 
-class Snake:
+class Skull:
     def __init__(self, parent_screen):
         self.parent_screen = parent_screen
-        self.image = pygame.image.load("resources/snakehead.jpg").convert()
-        self.image2 = pygame.image.load("resources/snakebody.jpg").convert()
-        self.direction = 'right'
-
+        self.image = pygame.image.load("resources/skull.png").convert()
+        self.image2 = pygame.image.load("resources/skullbody.png").convert()
         self.length = 1
-        self.x = [400]
-        self.y = [720]
-
-    def move_left(self):
+        self.x = [760]
+        self.y = [120]
         self.direction = 'left'
 
-    def move_right(self):
-        self.direction = 'right'
+    def draw(self):
+        for i in range(self.length):
+            if i == 0:
+                self.parent_screen.blit(self.image, (self.x[i], self.y[i]))
+            else:
+                self.parent_screen.blit(self.image2, (self.x[i], self.y[i]))
+        pygame.display.flip()
 
-    def move_up(self):
-        self.direction = 'up'
-
-    def move_down(self):
-        self.direction = 'down'
+    def move(self):
+        for i in range(self.length):
+            self.y[i] = random.randint(1, 19) * SIZE
+            self.x[i] = 920
 
     def walk(self):
-        # update body
         for i in range(self.length - 1, 0, -1):
             self.x[i] = self.x[i - 1]
             self.y[i] = self.y[i - 1]
 
-        # update head
         if self.direction == 'left':
-            self.x[0] -= SIZE
+            self.x[0] -= SIZE / 2
         if self.direction == 'right':
-            self.x[0] += SIZE
+            self.x[0] += SIZE / 2
         if self.direction == 'up':
-            self.y[0] -= SIZE
+            self.y[0] -= SIZE / 2
         if self.direction == 'down':
-            self.y[0] += SIZE
+            self.y[0] += SIZE / 2
 
         self.draw()
-
-    def draw(self):
-        self.parent_screen.fill(BACKGROUND_COLOR)
-        if self.length <= 1:
-            for i in range(self.length):
-                self.parent_screen.blit(self.image, (self.x[0], self.y[0]))
-
-        if self.length > 1:
-            for i in range(self.length):
-                self.parent_screen.blit(self.image, (self.x[0], self.y[0]))
-                self.parent_screen.blit(self.image2, (self.x[i], self.y[i]))
-        pygame.display.flip()
-
-    def increase_length(self):
-        self.length += 1
-        self.x.append(-1)
-        self.y.append(-1)
-
-    def decrease_length(self):
-        self.length -= 1
-        self.x.append(-1)
-        self.y.append(-1)
 
 
 def is_collision(x1, y1, x2, y2):
