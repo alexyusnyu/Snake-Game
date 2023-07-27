@@ -28,11 +28,6 @@ Down Arrow: Move the snake down.
 Escape: Exit the game.
 Enter: Restart the game after Game Over.
 
-## Scoring
-Eating an apple increases the score.
-Colliding with a skull or the snake's body decreases the score.
-The game ends when the snake's length reaches zero or collides with the boundaries.
-
 ## Screenshots
 ![](snake_preview_gif.gif)
 
