@@ -21,12 +21,12 @@ The snake will grow in length by eating apples and decrease by colliding with sk
 Avoid collisions with the snake's body, boundaries, skulls, and birds.
 
 ## Game Controls
-Left Arrow: Move the snake left.
-Right Arrow: Move the snake right.
-Up Arrow: Move the snake up.
-Down Arrow: Move the snake down.
-Escape: Exit the game.
-Enter: Restart the game after Game Over.
+* Left Arrow: Move the snake left.
+* Right Arrow: Move the snake right.
+* Up Arrow: Move the snake up.
+* Down Arrow: Move the snake down.
+* Escape: Exit the game.
+* Enter: Restart the game after Game Over.
 
 ## Screenshots
 ![](preview.gif)
