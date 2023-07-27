@@ -29,7 +29,7 @@ Escape: Exit the game.
 Enter: Restart the game after Game Over.
 
 ## Screenshots
-![](snake_preview_gif.gif)
+![](preview.gif)
 
 ## Acknowledgments
 The Snake Game is a classic arcade game concept.
