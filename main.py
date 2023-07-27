@@ -78,7 +78,6 @@ class Apple:
         self.direction = 'right'
 
     def draw(self):
-
         for i in range(self.length):
             self.parent_screen.blit(self.image, (self.x, self.y))
 
@@ -115,7 +114,6 @@ class Apple2:
         self.direction = 'up'
 
     def draw(self):
-
         for i in range(self.length):
             self.parent_screen.blit(self.image, (self.x, self.y))
 
@@ -152,7 +150,6 @@ class Bird:
         self.direction = 'down'
 
     def draw(self):
-
         for i in range(self.length):
             self.parent_screen.blit(self.image, (self.x, self.y))
 
@@ -260,31 +257,6 @@ class Game:
 
         self.surface = pygame.display.set_mode((1000, 800))
         self.snake = Snake(self.surface)
-        self.snake.draw()
-        self.apple = Apple(self.surface)
-        self.apple.draw()
-        self.apple2 = Apple2(self.surface)
-        self.apple2.draw()
-        self.bird = Bird(self.surface)
-        self.bird.draw()
-        self.skull = Skull(self.surface)
-        self.skull.draw()
-
-    # def play_background_music(self):
-    #   pygame.mixer.music.load('resources/bg_music_1.mp3')
-    #  pygame.mixer.music.play(-1, 0)
-
-    # def play_sound(self, sound_name):
-    #  if sound_name == "crash":
-    #     sound = pygame.mixer.Sound("resources/crash.mp3")
-    # elif sound_name == 'ding':
-    #   sound = pygame.mixer.Sound("resources/ding.mp3")
-
-    # pygame.mixer.Sound.play(sound)
-    # pygame.mixer.music.stop()
-
-    def reset(self):
-        self.snake = Snake(self.surface)
         self.apple = Apple(self.surface)
         self.apple2 = Apple2(self.surface)
         self.bird = Bird(self.surface)
@@ -367,24 +339,24 @@ class Game:
         if self.snake.length == 0:
             raise "You are dead!"
 
-        # snake colliding with the boundries of the window
+        # snake colliding with the boundaries of the window
         if not (0 <= self.snake.x[0] <= 1000 and 0 <= self.snake.y[0] <= 800):
             # self.play_sound('crash')
-            raise "Hit the boundry error"
+            raise "Hit the boundary error"
 
-        # bird colliding with the boundries of the window
+        # bird colliding with the boundaries of the window
         if not (0 <= self.bird.x <= 1000 and 0 <= self.bird.y <= 800):
             self.bird.move()
 
-        # apple colliding with the boundries of the window
+        # apple colliding with the boundaries of the window
         if not (0 <= self.apple.x <= 1000 and 0 <= self.apple.y <= 800):
             self.apple.move()
 
-        # apple colliding with the boundries of the window
+        # apple colliding with the boundaries of the window
         if not (0 <= self.apple2.x <= 1000 and 0 <= self.apple2.y <= 800):
             self.apple2.move()
 
-        # skull colliding with the boundries of the window
+        # skull colliding with the boundaries of the window
         if not (0 <= self.skull.x[0] <= 1000 and 0 <= self.skull.y[0] <= 800):
             self.skull.move()
             self.skull.increase_length()
@@ -403,6 +375,13 @@ class Game:
         self.surface.blit(line2, (200, 350))
         pygame.mixer.music.pause()
         pygame.display.flip()
+
+    def reset(self):
+        self.snake = Snake(self.surface)
+        self.apple = Apple(self.surface)
+        self.apple2 = Apple2(self.surface)
+        self.bird = Bird(self.surface)
+        self.skull = Skull(self.surface)
 
     def run(self):
         running = True
