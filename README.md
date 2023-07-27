@@ -31,12 +31,12 @@ Avoid collisions with the snake's body, boundaries, skulls, and birds.
 ## Screenshots
 ![](preview.gif)
 
-## Acknowledgments
-The Snake Game is a classic arcade game concept.
-Pygame library for graphics and game development in Python.
+## License:
 
-## License
-Mit License
+This project is licensed under the [MIT License](LICENSE).
+
+---
+Feel free to contribute to this project. If you encounter any issues or have suggestions, please create an issue or a pull request.
 
 ## Author
 sh4dowpunk
