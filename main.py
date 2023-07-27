@@ -253,35 +253,14 @@ def is_collision(x1, y1, x2, y2):
 class Game:
     def __init__(self):
         pygame.init()
-        pygame.display.set_caption(" Snake And Apple Game")
-
-        pygame.mixer.init()
-        # self.play_background_music()
-
+        pygame.display.set_caption("Snake And Apple Game")
         self.surface = pygame.display.set_mode((1000, 800))
+        self.clock = pygame.time.Clock()
         self.snake = Snake(self.surface)
-        self.snake.draw()
         self.apple = Apple(self.surface)
-        self.apple.draw()
         self.apple2 = Apple2(self.surface)
-        self.apple2.draw()
         self.bird = Bird(self.surface)
-        self.bird.draw()
         self.skull = Skull(self.surface)
-        self.skull.draw()
-
-    # def play_background_music(self):
-    #   pygame.mixer.music.load('resources/bg_music_1.mp3')
-    #  pygame.mixer.music.play(-1, 0)
-
-    # def play_sound(self, sound_name):
-    #  if sound_name == "crash":
-    #     sound = pygame.mixer.Sound("resources/crash.mp3")
-    # elif sound_name == 'ding':
-    #   sound = pygame.mixer.Sound("resources/ding.mp3")
-
-    # pygame.mixer.Sound.play(sound)
-    # pygame.mixer.music.stop()
 
     def reset(self):
         self.snake = Snake(self.surface)
@@ -293,101 +272,6 @@ class Game:
     def render_background(self):
         bg = pygame.image.load("resources/background.jpg")
         self.surface.blit(bg, (0, 0))
-
-    def play(self):
-        self.render_background()
-        self.snake.walk()
-        self.apple.walk()
-        self.apple2.walk()
-        self.bird.walk()
-        self.skull.walk()
-        self.display_score()
-        pygame.display.flip()
-
-        # snake eating apple scenario
-        if is_collision(self.snake.x[0], self.snake.y[0], self.apple.x, self.apple.y):
-            self.snake.decrease_length()
-            self.skull.decrease_length()
-            self.apple.move()
-
-        # snake eating apple2 scenario
-        if is_collision(self.snake.x[0], self.snake.y[0], self.apple2.x, self.apple2.y):
-            self.snake.decrease_length()
-            self.skull.decrease_length()
-            self.apple2.move()
-
-        # apple colliding with SNAKE BODY
-        for i in range(2, self.snake.length):
-            if is_collision(self.apple.x, self.apple.y, self.snake.x[i], self.snake.y[i]):
-                self.snake.decrease_length()
-                self.skull.decrease_length()
-                self.apple.move()
-
-        # apple2 colliding with SNAKE BODY
-        for i in range(2, self.snake.length):
-            if is_collision(self.apple2.x, self.apple2.y, self.snake.x[i], self.snake.y[i]):
-                self.snake.decrease_length()
-                self.skull.decrease_length()
-                self.apple2.move()
-
-        # snake eating skull scenario
-        if is_collision(self.snake.x[0], self.snake.y[0], self.skull.x[0], self.skull.y[0]):
-            for i in range(self.snake.length):
-                self.snake.decrease_length()
-
-        # skull colliding with SNAKE BODY
-        for i in range(2, self.snake.length):
-            if is_collision(self.skull.x[0], self.skull.y[0], self.snake.x[i], self.snake.y[i]):
-                for ii in range(self.snake.length):
-                    self.snake.decrease_length()
-
-        # Skull body colliding with snake head
-        for i in range(2, self.skull.length):
-            if is_collision(self.skull.x[i], self.skull.y[i], self.snake.x[0], self.snake.y[0]):
-                for ii in range(self.snake.length):
-                    self.snake.decrease_length()
-
-        # snake eating bird scenario
-        if is_collision(self.snake.x[0], self.snake.y[0], self.bird.x, self.bird.y):
-            self.snake.increase_length()
-            self.bird.move()
-
-        # bird colliding with SNAKE BODY
-        for i in range(2, self.snake.length):
-            if is_collision(self.bird.x, self.bird.y, self.snake.x[i], self.snake.y[i]):
-                self.snake.increase_length()
-                self.bird.move()
-
-        # snake colliding with itself
-        # for i in range(2, self.snake.length):
-        #   if self.is_collision(self.snake.x[0], self.snake.y[0], self.snake.x[i], self.snake.y[i]):
-        #      # self.play_sound('crash')
-        #     raise "Collision Occurred"
-
-        if self.snake.length == 0:
-            raise "You are dead!"
-
-        # snake colliding with the boundries of the window
-        if not (0 <= self.snake.x[0] <= 1000 and 0 <= self.snake.y[0] <= 800):
-            # self.play_sound('crash')
-            raise "Hit the boundry error"
-
-        # bird colliding with the boundries of the window
-        if not (0 <= self.bird.x <= 1000 and 0 <= self.bird.y <= 800):
-            self.bird.move()
-
-        # apple colliding with the boundries of the window
-        if not (0 <= self.apple.x <= 1000 and 0 <= self.apple.y <= 800):
-            self.apple.move()
-
-        # apple colliding with the boundries of the window
-        if not (0 <= self.apple2.x <= 1000 and 0 <= self.apple2.y <= 800):
-            self.apple2.move()
-
-        # skull colliding with the boundries of the window
-        if not (0 <= self.skull.x[0] <= 1000 and 0 <= self.skull.y[0] <= 800):
-            self.skull.move()
-            self.skull.increase_length()
 
     def display_score(self):
         font = pygame.font.SysFont('arial', 30)
@@ -404,6 +288,46 @@ class Game:
         pygame.mixer.music.pause()
         pygame.display.flip()
 
+    def play(self):
+        self.render_background()
+        self.snake.walk()
+        self.apple.walk()
+        self.apple2.walk()
+        self.bird.walk()
+        self.skull.walk()
+        self.display_score()
+        pygame.display.flip()
+
+        if self.snake.is_collision_with_apple(self.apple):
+            self.snake.increase_length()
+            self.apple.move()
+
+        if self.snake.is_collision_with_apple2(self.apple2):
+            self.snake.increase_length()
+            self.apple2.move()
+
+        if self.snake.is_collision_with_skull(self.skull):
+            self.snake.decrease_length()
+
+        if self.snake.is_collision_with_bird(self.bird):
+            self.snake.increase_length()
+            self.bird.move()
+
+        if self.snake.length == 0:
+            raise Exception("You are dead!")
+
+        if not (0 <= self.snake.x[0] < 1000 and 0 <= self.snake.y[0] < 800):
+            raise Exception("Hit the boundary error")
+
+        if not (0 <= self.bird.x < 1000 and 0 <= self.bird.y < 800):
+            self.bird.move()
+
+        if not (0 <= self.apple.x < 1000 and 0 <= self.apple.y < 800):
+            self.apple.move()
+
+        if not (0 <= self.apple2.x < 1000 and 0 <= self.apple2.y < 800):
+            self.apple2.move()
+
     def run(self):
         running = True
         pause = False
@@ -413,37 +337,32 @@ class Game:
                 if event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
                         running = False
-
                     if event.key == K_RETURN:
                         pygame.mixer.music.unpause()
                         pause = False
-
                     if not pause:
                         if event.key == K_LEFT:
                             self.snake.move_left()
-
                         if event.key == K_RIGHT:
                             self.snake.move_right()
-
                         if event.key == K_UP:
                             self.snake.move_up()
-
                         if event.key == K_DOWN:
                             self.snake.move_down()
-
                 elif event.type == QUIT:
                     running = False
-            try:
 
+            try:
                 if not pause:
                     self.play()
-
             except Exception as e:
                 self.show_game_over()
                 pause = True
                 self.reset()
 
-            time.sleep(.1)
+            self.clock.tick(10)  # Set the game's frame rate
+
+        pygame.quit()
 
 
 if __name__ == '__main__':
