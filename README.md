@@ -28,8 +28,8 @@ Avoid collisions with the snake's body, boundaries, skulls, and birds.
 * Escape: Exit the game.
 * Enter: Restart the game after Game Over.
 
-## Screenshots
-![](preview.gif)
+## Preview
+![](game_preview.gif)
 
 ## License:
 
